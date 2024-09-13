@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חיפוש דפים בתלמוד הבבלי</title>
+    <script src="popup.js" defer></script>
+    <script src="focus.js" defer></script>
+    <script src="errors.js" defer></script> <!-- קובץ לטיפול בהודעות השגיאה -->
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f0f4f8; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            color: #333; 
+            direction: rtl; 
+        }
+        h1 { 
+            margin-bottom: 20px; 
+            font-size: 2em; 
+            color: #4A90E2; 
+        }
+        input { 
+            direction: rtl; 
+            width: 300px; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border: 2px solid #4A90E2; 
+            border-radius: 5px; 
+            font-size: 1.2em; 
+            transition: border-color 0.3s; 
+        }
+        input:focus { 
+            border-color: #007BFF; 
+            outline: none; 
+        }
+        button { 
+            background-color: #4A90E2; 
+            color: white; 
+            padding: 15px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            font-size: 1.2em; 
+            cursor: pointer; 
+            transition: background-color 0.3s; 
+        }
+        button:hover { 
+            background-color: #007BFF; 
+        }
+        #error-message {
+        display: none; /* Initially hidden */
+        background-color: #f8d7da; /* Light red background */
+        color: #721c24; /* Dark red text */
+        border: 1px solid #f5c6cb; /* Border color */
+        border-radius: 5px; /* Rounded corners */
+        padding: 10px; /* Padding for spacing */
+        margin-top: 20px; /* Space above the error message */
+        width: 300px; /* Width of the message box */
+        text-align: center; /* Centered text */
+        animation: fadein 0.5s; /* Fade-in effect */
+        }
+
+        /* Fade-in animation */
+        @keyframes fadein {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div>
+        <h1>חיפוש דפים בתלמוד הבבלי</h1>
+        
+        <input type="text" id="query" placeholder="הכנס מסכת, דף ועמוד" autocomplete="off">
+        
+        <button id="navigate">Go</button>
+        <div id="error-message"></div> <!-- אלמנט הודעת השגיאה -->
+    </div>
+
+</body>
+</html>
