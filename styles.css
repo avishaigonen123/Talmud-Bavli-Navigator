@@ -1,0 +1,199 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap');
+@font-face {
+    font-family: 'GveretLevin';
+    src: url('fonts/GveretLevinAlefAlefAlef-Regular.woff2') format('woff2'),
+         url('fonts/GveretLevinAlefAlefAlef-Regular.woff.') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'Heebo';
+    src: url('Heebo-Regular.woff2') format('woff2'),
+         url('Heebo-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Heebo';
+    src: url('Heebo-Bold.woff2') format('woff2'),
+         url('Heebo-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+
+body { 
+    font-family: 'GveretLevin', Arial, sans-serif; 
+    background-color: #f0f4f8; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    margin: 0; 
+    color: #333; 
+    direction: rtl; 
+    position: relative;
+}
+
+.container {
+    text-align: right;
+    padding: 20px;
+}
+
+h1 { 
+    margin-bottom: 20px; 
+    font-size: 2em; 
+    color: #4A90E2; 
+    margin-right: 20px; /* Added margin to move title to the right */
+}
+
+input { 
+    direction: rtl; 
+    width: 300px; 
+    padding: 15px; 
+    margin: 10px 0; 
+    border: 2px solid #4A90E2; 
+    border-radius: 5px; 
+    font-size: 1.2em; 
+    transition: border-color 0.3s; 
+}
+
+input:focus { 
+    border-color: #007BFF; 
+    outline: none; 
+}
+
+button#navigate { 
+    background-color: #4A90E2; 
+    color: white; 
+    padding: 15px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    font-size: 1.2em; 
+    font-family: 'GveretLevin';
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+    margin: 5px;
+}
+
+button#navigate:hover { 
+    background-color: #007BFF; 
+}
+
+#error-message {
+    display: none;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px;
+    width: 300px;
+    text-align: center;
+    animation: fadein 0.5s;
+}
+
+button.info-btn {
+    background-color: #ccc;
+    color: #333;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+    text-align: center;
+    line-height: 25px;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: background-color 0.3s;
+    position: relative;
+}
+
+button.info-btn:hover {
+    background-color: #999;
+}
+
+.floating-window {
+    position: fixed;
+    display: none;
+    opacity: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(151, 12, 182, 0.447);
+    z-index: 1000;
+    transition: opacity 0.5s ease-in-out;
+    width: 200px;
+    max-height: 300px;  
+    overflow-y: auto; 
+    font-family: Arial, sans-serif; /* Added Hebrew font */
+}
+
+.fade-in {
+    opacity: 1;
+    display: block;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+.info-section {
+    margin-top: 20px;
+}
+
+.info-section div {
+    margin-bottom: 10px;
+}
+
+
+.help-btn {
+    position: fixed;
+    font-family: "Helvetica",;
+    font-weight: bold;
+    left: 20px;
+    bottom: 20px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: rgba(255, 255, 255, 0.796);
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.help-btn:hover {
+    background-color: #0056b3;
+}
+
+.help-window {
+    position: fixed;
+    left: 65px;
+    bottom: 20px;
+    width: 270px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: none;
+    font-size: 14px;
+    text-align: right;
+    direction: rtl;
+}
+
+.help-window h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.help-window p {
+    margin: 0;
+}

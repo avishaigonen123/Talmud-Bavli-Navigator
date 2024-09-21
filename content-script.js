@@ -5,6 +5,14 @@ console.log("Content script is running...");
 
 // Wait for the page to load
 window.onload = function() {
+    // close annoying window in Al-Hatora
+    autoClickCloseButton();
+
+    // full screen in Daf-Yomi page
+    autoClickFullScreenButton();
+}
+
+function autoClickFullScreenButton() {
     console.log("Page loaded, checking for button...");
 
     // Try to find the button
@@ -36,4 +44,26 @@ window.onload = function() {
         }, 5000);
     }
 };
-    
+
+function autoClickCloseButton() {
+    const buttons = document.querySelectorAll('button');
+    let closeButton = null;
+
+    buttons.forEach(button => {
+        if (button.textContent.includes("Close") || button.textContent.includes("סגירה")) {
+            closeButton = button;
+        }
+    });
+
+    if (closeButton) {
+        closeButton.addEventListener('click', handleCloseButtonClick);
+        closeButton.click(); // Simulate click
+        }
+}
+
+function handleCloseButtonClick() {
+    const overlay = document.querySelector('.mg-popup-overlay');
+    if (overlay) {
+        overlay.remove();
+    }
+}

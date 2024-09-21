@@ -1,46 +1,178 @@
-// Table with the number of pages for each Masechet
-const masechtot = [
-    ['ברכות', 63],
-    ['שבת', 156.5],
-    ['עירובין', 104],
-    ['פסחים', 120.5],
-    ['שקלים', 21.5],
-    ['יומא', 87],
-    ['סוכה', 55.5],
-    ['ביצה', 39.5],
-    ['ראש השנה', 34],
-    ['תענית', 30],
-    ['מגילה', 31],
-    ['מועד קטן', 28],
-    ['חגיגה', 26],
-    ['יבמות', 121.5],
-    ['כתובות', 111.5],
-    ['נדרים', 90.5],
-    ['נזיר', 65.5],
-    ['סוטה', 48.5],
-    ['גיטין', 89.5],
-    ['קידושין', 81.5],
-    ['בבא קמא', 118.5],
-    ['בבא מציעא', 118],
-    ['בבא בתרא', 175.5],
-    ['סנהדרין', 112.5],
-    ['מכות', 23.5],
-    ['שבועות', 48.5],
-    ['עבודה זרה', 75.5],
-    ['הוריות', 13],
-    ['זבחים', 119.5],
-    ['מנחות', 109],
-    ['חולין', 141],
-    ['בכורות', 60],
-    ['ערכין', 33],
-    ['תמורה', 34],
-    ['כריתות', 27.5],
-    ['מעילה', 20],
-    ['קנים', 3],
-    ['תמיד', 9.5],
-    ['מדות', 4.5],
-    ['נידה', 72]
-];
+let parshanim = {};
+let masechtot = [];
+let masechtot_yerushalmi = [];
+let halakim = {};
+
+// Load parshanim.json, masechtot.json, etc.
+async function loadParshanim() {
+    try {
+        const response = await fetch(chrome.runtime.getURL('data/parshanim.json'));
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        parshanim = await response.json(); // Parse JSON and assign it to parshanim
+    } catch (error) {
+        console.error('Error fetching the JSON file:', error);
+    }
+}
+
+async function loadHalakim() {
+    try {
+        const response = await fetch(chrome.runtime.getURL('data/halakim.json'));
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        halakim = await response.json(); // Parse JSON and assign it to parshanim
+    } catch (error) {
+        console.error('Error fetching the JSON file:', error);
+    }
+}
+
+async function loadMasechtot() {
+    try {
+        const response = await fetch(chrome.runtime.getURL('data/masechtot.json'));
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        masechtot = await response.json(); // Parse JSON and assign it to parshanim
+    } catch (error) {
+        console.error('Error fetching the JSON file:', error);
+    }
+}
+
+async function loadMasechtotYerushalmi() {
+    try {
+        const response = await fetch(chrome.runtime.getURL('data/masechtot_yerushalmi.json'));
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        masechtot_yerushalmi = await response.json(); // Parse JSON and assign it to parshanim
+    } catch (error) {
+        console.error('Error fetching the JSON file:', error);
+    }
+}
+
+let popupWindow = null; // Store the reference to the popup window
+
+// Show the floating window when hovering over the button
+function showPopupWindow(items, title, button) {
+    const popupContent = `
+        <html dir="rtl">
+        <head>
+            <title>${title}</title>
+            <style>
+                @font-face {
+                    font-family: 'KeterAramTsova';
+                    src: url('fonts/KeterAramTsova.woff2') format('woff2'),
+                        url('fonts/KeterAramTsova.woff') format('woff');
+                    font-weight: normal;
+                    font-style: normal;
+                }
+
+                body {
+                    font-family: 'KeterAramTsova', Arial, sans-serif;
+                    font-size: 20px;
+                    margin: 20px;
+                    padding: 10px;
+                    background-color: #f0f0f0;
+                }
+                h2 {
+                    text-align: right;
+                }
+                ul {
+                    list-style-type: none;
+                    padding: 0;
+                }
+                li {
+                    padding: 5px 0;
+                    border-bottom: 1px solid #ddd;
+                }
+            </style>
+        </head>
+        <body>
+            <h2>${title}</h2>
+            <ul>
+                ${items.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+        </body>
+        </html>
+    `;
+
+    
+    
+    // Check if the popup window is already open
+    if (popupWindow) {
+        popupWindow.close();
+        popupWindow = null;
+    }
+
+    // Open a new window with specific position
+    popupWindow = window.open('', '_blank', `width=350,height=450,left=650,top=50`);
+
+    // Write the content to the new window
+    popupWindow.document.write(popupContent);
+    popupWindow.document.close(); // Close the document to finish loading
+}
+
+// Event handler for showing the popup
+function setupPopupButton(buttonId, items, title) {
+    const button = document.getElementById(buttonId);
+
+    // Open the popup when hovering over the button
+    button.addEventListener('mouseenter', () => {
+        showPopupWindow(items, title);
+    });
+    
+}
+
+// Help button functionality
+const helpBtn = document.getElementById('helpBtn');
+const helpWindow = document.getElementById('helpWindow');
+
+helpBtn.addEventListener('mouseenter', () => {
+    helpWindow.style.display = 'block';
+});
+
+helpBtn.addEventListener('mouseleave', () => {
+    helpWindow.style.display = 'none';
+});
+
+// Function to display error messages
+function showError(message) {
+    const errorMessageDiv = document.getElementById('error-message');
+    errorMessageDiv.innerText = message; // Set the error message text
+    errorMessageDiv.style.display = 'block'; // Show the error message
+    setTimeout(() => {
+        errorMessageDiv.style.display = 'none'; // Hide after 3 seconds
+    }, 3000); // Adjust time as needed
+}
+
+// Initialize the popup windows for each button
+async function init() {
+    await loadParshanim();
+    await loadMasechtot();
+    await loadHalakim();
+    await loadMasechtotYerushalmi();
+    
+    // Populate the popups with the relevant lists
+    const parshanimKeys = Object.keys(parshanim);
+    setupPopupButton('parshanimBtn', parshanimKeys, 'רשימת פרשנים');
+
+    const masechtotNames = masechtot.map(item => item[0]);
+    setupPopupButton('masechtotBtn', masechtotNames, 'רשימת מסכתות בבלי');
+
+    const halakimKeys = Object.keys(halakim);
+    setupPopupButton('halakimBtn', halakimKeys, 'רשימת חלקים ברמב"ם');
+
+    const masechtotYerushalmiNames = masechtot_yerushalmi.map(item => item[0]);
+    setupPopupButton('masechtotYerushalmiBtn', masechtotYerushalmiNames, 'רשימת מסכתות ירושלמי');
+    
+    console.log('Popup windows are ready.');
+}
+
+// Call init to initialize and populate popup windows
+init();
+
 
 // Hebrew numeral to integer mapping
 const hebrewNumerals = {
@@ -62,6 +194,7 @@ function hebrewToNumber(hebrewStr) {
     }
     return total;
 }
+
 // Reverse mapping of hebrewNumerals
 const numberToHebrew = Object.entries(hebrewNumerals).reduce((acc, [hebrew, number]) => {
     acc[number] = hebrew;
@@ -104,9 +237,8 @@ function numberToHebrewString(number) {
 function calculateGlobalPage(masechet, daf, amud) {
     let totalPages = 0;
     let found = false;
-
-    for (let [m, pages] of masechtot) {
-        if (m === masechet) {
+    for (let [maschet_name, [pages, _]] of masechtot){
+        if (maschet_name === masechet) {
             found = true;
             totalPages += (daf - 2) * 2;  // First page is daf 2a
             totalPages += amud === 'a' ? 1 : 2;
@@ -114,7 +246,7 @@ function calculateGlobalPage(masechet, daf, amud) {
         } else {
             totalPages += pages * 2 - 1;  // Each daf has two amudim
         }
-    }
+        }
 
     if (!found) {
         return "המסכת הנ\" לא קיימת בתלמוד הבבלי";
@@ -123,60 +255,35 @@ function calculateGlobalPage(masechet, daf, amud) {
     return totalPages;
 }
 
+////////////////////////////////////////////////////////////////////////
 
-// Function to handle the navigation logic
+////////////////////////////////////////////////////////////////////////
+
+// Navigation logic for Talmud, Yerushalmi, Rambam, Parshanim
 function navigateToPage() {
     const query = document.getElementById('query').value.trim();
 
     // Parsing the user input (e.g., "גיטין לג")
     const parts = query.split(" ");
-    if (parts.length !== 2 && parts.length !== 3) {
+    if (parts.length == 1 || parts.length > 7) {
         showError("הכנס שאילתא חוקית");
         return;
     }
+    // case gmara bavli
+    // example: גיטין פב
+    if (parts.length == 2 || (parts.length == 3 && (parts[0] == "מועד" || parts[0] == "ראש" || parts[0] == "מועד" || parts[0] == "בבא" || parts[0] == "עבודה")) || (parts[parts.length - 1] == "התורה" && parts[parts.length-2] == "על")) 
+        gmara_bavli(parts);
+        
+    // case yerushalmi or rambam
+    // example: ירושלמי גיטין א א
+    else if(parts[0] == "ירושלמי" || parts[0] == "רמבם" || parts[0] == "תוספתא")
+        yerushalmi(parts);
 
-    let masechet = parts[0];
-    let dafInHebrew;
-    if (masechet == "ראש" || masechet == "מועד" || masechet == "בבא" || masechet == "עבודה" ){
-        masechet += " " + parts[1];
-        dafInHebrew = parts[2].replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
-    }
-    else {
-        dafInHebrew = parts[1].replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
-    }
-
-    // Convert Hebrew numerals to integer for daf
-    const daf = hebrewToNumber(dafInHebrew);
-    if (isNaN(daf) || daf < 2) {  // Daf must be at least 2
-        showError("בתלמוד הבבלי הדפים מתחילים מדף ב");
-        return;
-    }
-
-    // Find the maximum Daf for the selected Masechet
-    const masechetInfo = masechtot.find(m => m[0] === masechet);
-    if (!masechetInfo) {
-        showError("מסכת לא נמצאה");
-        return;
-    }
-
-    const maxDaf = masechetInfo[1] + 1;  // Number of Dafim in the Masechet
-    if (daf > maxDaf) {
-        showError(`הדף האחרון במסכת ${masechet} הוא דף ${numberToHebrewString(Math.floor(maxDaf))}`);
-        return;
-    }
+    // case parshanim
+    // example: גיטין רשבא פב
+    else        
+        parshanim_func(parts);
     
-    const amud = parts[1].endsWith(':') ? 'b' : 'a';  // Detect amud based on input
-
-    // Calculate the global page number
-    const globalPage = calculateGlobalPage(masechet, daf, amud);
-
-    if (isNaN(globalPage)) {
-        showError(globalPage);  // Display error message
-    } else {
-        // Navigate to the corresponding page on Daf Yomi
-        const url = `https://www.daf-yomi.com/Dafyomi_Page.aspx?id=${globalPage}&vt=1&fs=0`;
-        chrome.tabs.create({ url: url });
-    }
 }
 
 // Handle click on "Go" button
@@ -188,4 +295,249 @@ document.getElementById('query').addEventListener('keydown', function (e) {
         navigateToPage();
     }
 });
+
+// gmara bavli case
+function gmara_bavli(parts){
+    let dafInHebrew;
+        let masechet = parts[0];
+        if (masechet == "מעשר" || masechet == "ראש" || masechet == "מועד" || masechet == "בבא" || masechet == "עבודה" ){
+            masechet += " " + parts[1];
+            dafInHebrew = parts[2].replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
+        }
+        else {
+            dafInHebrew = parts[1].replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
+        }
+    
+        // Convert Hebrew numerals to integer for daf
+        let daf = hebrewToNumber(dafInHebrew);
+        if (isNaN(daf) || daf < 2) {  // Daf must be at least 2
+            showError("בתלמוד הבבלי הדפים מתחילים מדף ב");
+            return;
+        }
+    
+        // Find the maximum Daf for the selected Masechet
+        const masechetInfo = masechtot.find(m => m[0] === masechet);
+        if (!masechetInfo) {
+            showError("מסכת לא נמצאה");
+            return;
+        }
+    
+        const maxDaf = masechetInfo[1][0] + 1;  // Number of Dafim in the Masechet
+        if (daf > maxDaf) {
+            showError(`הדף האחרון במסכת ${masechet} הוא דף ${numberToHebrewString(Math.floor(maxDaf))}`);
+            return;
+        }
+        
+        parts.reverse();
+        if (parts[0] == "התורה" && parts[1] == "על"){
+            let i=0;
+            for (const _mass of masechtot){
+                if(_mass[0] === masechet)
+                    break;
+                i+=1;
+            }   
+            masechet = masechtot[i][1][1]; // find the english word
+            
+            // Convert Hebrew numerals to integer for daf
+            dafInHebrew = parts[2].replace(/[^א-ת]/g, '');
+            daf = hebrewToNumber(dafInHebrew);
+            if (isNaN(daf) || daf < 2) {  // Daf must be at least 2
+                showError("בתלמוד הבבלי הדפים מתחילים מדף ב");
+                return;
+            }
+            const amud = parts[2].endsWith(':') ? 'b' : 'a';  // Detect amud based on input
+
+            const url = `https://shas.alhatorah.org/Full/${masechet}/${daf}${amud}`;
+            chrome.tabs.create({ url: url });
+            return;
+    
+        }
+        else {
+            const amud = parts[0].endsWith(':') ? 'b' : 'a';  // Detect amud based on input
+        
+            // Calculate the global page number
+            const globalPage = calculateGlobalPage(masechet, daf, amud);
+        
+            if (isNaN(globalPage)) {
+                showError(globalPage);  // Display error message
+            } else {
+                // Navigate to the corresponding page on Daf Yomi
+                const url = `https://www.daf-yomi.com/Dafyomi_Page.aspx?id=${globalPage}&vt=1&fs=0`;
+                chrome.tabs.create({ url: url });
+            }
+        }
+
+}
+
+// Parshanim case
+function parshanim_func(parts){
+    let masechet = parts[0];
+    let dafInHebrew;
+    let parshan;
+    let amud;
+
+    let index = 1;
+    if (masechet == "מעשר" || masechet == "ראש" || masechet == "מועד" || masechet == "בבא" || masechet == "עבודה" ){
+        masechet += " " + parts[index];
+        index+=1;
+        parshan = parts[index];
+    }
+    else {
+        parshan = parts[index];
+    }
+
+    // the parshan can be more than one word
+    while(index<parts.length-2){
+        index += 1
+        parshan += " " + parts[index] 
+    }
+
+    parts.reverse();
+    dafInHebrew = parts[0].replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
+    amud = parts[0].endsWith(':') ? 'b' : 'a';  // Detect amud based on input
+
+    
+    let i=0;
+    for (const _mass of masechtot){
+        if(_mass[0] === masechet)
+            break;
+        i+=1;
+    }
+    if(i == masechtot.length)
+    {
+        showError("מסכת לא נמצאה");
+        return;
+    }
+
+    // check if parshan exists
+    if (!parshan in Object.keys(parshanim)) {
+        showError("פרשן לא נמצא");
+        return;
+    }
+    parshan = parshanim[parshan];
+    masechet = masechtot[i][1][1];
+
+    // Convert Hebrew numerals to integer for daf
+    const daf = hebrewToNumber(dafInHebrew);
+    if (isNaN(daf) || daf < 2) {  // Daf must be at least 2
+        showError("בתלמוד הבבלי הדפים מתחילים מדף ב");
+        return;
+    }
+
+    const url = `https://shas.alhatorah.org/Dual/${parshan}/${masechet}/${daf}${amud}`;
+    chrome.tabs.create({ url: url });
+    return;
+}
+
+// Yerushalmi and Rambam case
+function yerushalmi(parts){
+    let masechet = parts[0];
+    let perek, halacha;
+    if (masechet ===  "ירושלמי"){
+        masechet = parts[1];
+
+        if (masechet == "מעשר" || masechet == "ראש" || masechet == "מועד" || masechet == "בבא" ){
+            masechet += " " + parts[2];
+    
+            perek = parts[3];
+            halacha = parts[4];
+        }
+        else {
+            perek = parts[2];
+            halacha = parts[3];
+        }
+        
+           // Find the maximum Daf for the selected Masechet
+           const masechetInfo = masechtot_yerushalmi.find(m => m[0] === masechet);
+           if (!masechetInfo) {
+               showError("מסכת לא נמצאה");
+               return;
+           }
+
+        const url = `https://he.wikisource.org/wiki/ירושלמי_${masechet}_${perek}_${halacha}`;
+        chrome.tabs.create({ url: url });
+        return;
+    }
+    else if (masechet ===  "רמבם"){
+        let helek = parts[1];
+        if (helek == "שביתת" ){
+            masechet += " " + parts[2];
+        }
+        parts.reverse();
+        let perekInHebrew = parts[1];
+        let halachaInHebrew = parts[0];
+        
+        // Check if it can be a prefix and save the matching key
+        const matchingKey = Object.keys(halakim).find(key => key.startsWith(helek));
+
+        if (!matchingKey) {
+            showError("חלק לא נמצא");
+            return;
+        }
+
+        helek = halakim[matchingKey];
+        
+        perekInHebrew = perekInHebrew.replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
+        // Convert Hebrew numerals to integer for daf
+        const perek = hebrewToNumber(perekInHebrew);
+        if (isNaN(perek) ) {  // 
+            showError("פרק לא תקני");
+            return;
+        }
+        
+        halachaInHebrew = halachaInHebrew.replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
+        // Convert Hebrew numerals to integer for halacha
+        const halacha = hebrewToNumber(halachaInHebrew);
+        if (isNaN(halacha) ) {  
+            showError("הלכה לא תקנית");
+            return;
+            } 
+
+        const url = `https://rambam.alhatorah.org/Full/${helek}/${perek}.${halacha}}#e0n6`
+        chrome.tabs.create({ url: url });
+        return;
+    }
+    else if (masechet ===  "תוספתא"){
+        masechet = parts[1];
+        if (masechet == "מעשר" || masechet == "ראש" || masechet == "מועד" || masechet == "בבא" ){
+            masechet += " " + parts[2];
+        }
+        parts.reverse();
+        let perekInHebrew = parts[1];
+        let halachaInHebrew = parts[0];
+        
+        let i=0;
+        for (const _mass of masechtot){
+            if(_mass[0] === masechet)
+                break;
+            i+=1;
+        }
+        if(i == masechtot.length)
+        {
+            showError("מסכת לא נמצאה");
+            return;
+        }
+
+        masechet = masechtot[i][1][1];
+        perekInHebrew = perekInHebrew.replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
+        // Convert Hebrew numerals to integer for daf
+        const perek = hebrewToNumber(perekInHebrew);
+        if (isNaN(perek) ) {  // 
+            showError("פרק לא תקני");
+            return;
+        }
+        
+        halachaInHebrew = halachaInHebrew.replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
+        // Convert Hebrew numerals to integer for halacha
+        const halacha = hebrewToNumber(halachaInHebrew);
+        if (isNaN(halacha) ) {  
+            showError("הלכה לא תקנית");
+            return;
+        } 
+
+        const url = `https://tosefta.alhatorah.org/Full/${masechet}/${perek}.${halacha}}#e0n6`
+        chrome.tabs.create({ url: url });
+        return;
+    }
+}
 
