@@ -63,7 +63,7 @@ async function loadMasechtotYerushalmi() {
 let popupWindow = null; // Store the reference to the popup window
 
 // Show the floating window when hovering over the button
-function showPopupWindow(items, title, button) {
+function showPopupWindow(items, title) {
     const popupContent = `
         <html dir="rtl">
         <head>
@@ -113,7 +113,7 @@ function showPopupWindow(items, title, button) {
     }
 
     // Open a new window with specific position
-    popupWindow = window.open('', '_blank', `width=350,height=450,left=650,top=50`);
+    popupWindow = window.open('', '_blank', `width=400,height=330,left=1050,top=800`);
 
     // Write the content to the new window
     popupWindow.document.write(popupContent);
@@ -460,31 +460,61 @@ function parshanim_func(parts){
 // ----------------------------------------------------
 function yerushalmi(parts){
     let masechet = parts[0];
-    let perek, halacha;
+    let perekInHebrew, halachaInHebrew;
     if (masechet ===  "ירושלמי"){
         masechet = parts[1];
 
         if (masechet == "מעשר" || masechet == "ראש" || masechet == "מועד" || masechet == "בבא" ){
             masechet += " " + parts[2];
     
-            perek = parts[3];
-            halacha = parts[4];
+            perekInHebrew = parts[3];
+            halachaInHebrew = parts[4];
         }
         else {
-            perek = parts[2];
-            halacha = parts[3];
+            perekInHebrew = parts[2];
+            halachaInHebrew = parts[3];
         }
         
-           // Find the maximum Daf for the selected Masechet
-           const masechetInfo = masechtot_yerushalmi.find(m => m[0] === masechet);
-           if (!masechetInfo) {
-               showError("מסכת לא נמצאה");
-               return;
-           }
+        // Find the maximum Daf for the selected Masechet
+        const masechetInfo = masechtot_yerushalmi.find(m => m[0] === masechet);
+        if (!masechetInfo) {
+            showError("מסכת לא נמצאה");
+            return;
+        }
+        let url;
+        // if(parts[parts.length - 1] === "התורה" && parts[parts.length -2] === "על"){
+            
+            const masechetInEnglish = masechetInfo[1][1];
+            const prakimList = masechetInfo[1][0];
 
-        const url = `https://he.wikisource.org/wiki/ירושלמי_${masechet}_${perek}_${halacha}`;
+            perekInHebrew = perekInHebrew.replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
+            // Convert Hebrew numerals to integer for daf
+            const perek = hebrewToNumber(perekInHebrew);
+            if (isNaN(perek) || perek > prakimList.length ) {  // 
+                showError(`פרק לא תקני, הפרק המקסימלי במסכת ${masechet} הוא פרק ${numberToHebrewString(prakimList.length)}`);
+                return;
+            }
+            
+            halachaInHebrew = halachaInHebrew.replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
+            // Convert Hebrew numerals to integer for halacha
+            const halacha = hebrewToNumber(halachaInHebrew);
+            if (isNaN(perek) || halacha > prakimList[perek-1] ) {  // 
+                showError(`הלכה לא תקנית, ההלכה המקסימלית במסכת ${masechet} בפרק ${perekInHebrew} היא הלכה ${numberToHebrewString(prakimList[perek-1])}`);
+                return;
+            }
+            
+            let halachot_total = halacha;
+            for (let i = 0; i < perek-1; i++)
+                halachot_total += prakimList[i];
+
+            url = `https://yerushalmi.alhatorah.org/Full/${masechetInEnglish}/${halachot_total}`
+        // }
+        // else {
+        //     url = `https://he.wikisource.org/wiki/ירושלמי_${masechet}_${perekInHebrew}_${halachaInHebrew}`;
+        // }
         chrome.tabs.create({ url: url });
         return;
+        
     }
     else if (masechet ===  "רמבם"){
         let helek = parts[1];
