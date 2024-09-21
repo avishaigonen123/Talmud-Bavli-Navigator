@@ -1,3 +1,7 @@
+// ----------------------------------------------------
+// loading the data from the json files
+// ----------------------------------------------------
+
 let parshanim = {};
 let masechtot = [];
 let masechtot_yerushalmi = [];
@@ -52,6 +56,10 @@ async function loadMasechtotYerushalmi() {
     }
 }
 
+// ----------------------------------------------------
+// popup window logic
+// ----------------------------------------------------
+
 let popupWindow = null; // Store the reference to the popup window
 
 // Show the floating window when hovering over the button
@@ -97,8 +105,6 @@ function showPopupWindow(items, title, button) {
         </body>
         </html>
     `;
-
-    
     
     // Check if the popup window is already open
     if (popupWindow) {
@@ -125,6 +131,10 @@ function setupPopupButton(buttonId, items, title) {
     
 }
 
+// ----------------------------------------------------
+// help button logic + Go button and enter key handling
+// ----------------------------------------------------
+
 // Help button functionality
 const helpBtn = document.getElementById('helpBtn');
 const helpWindow = document.getElementById('helpWindow');
@@ -137,7 +147,20 @@ helpBtn.addEventListener('mouseleave', () => {
     helpWindow.style.display = 'none';
 });
 
+// Handle click on "Go" button
+document.getElementById('navigate').addEventListener('click', navigateToPage);
+
+// Handle "Enter" key press inside the input field
+document.getElementById('query').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+        navigateToPage();
+    }
+});
+
+// ----------------------------------------------------
 // Function to display error messages
+// ----------------------------------------------------
+
 function showError(message) {
     const errorMessageDiv = document.getElementById('error-message');
     errorMessageDiv.innerText = message; // Set the error message text
@@ -147,7 +170,10 @@ function showError(message) {
     }, 3000); // Adjust time as needed
 }
 
-// Initialize the popup windows for each button
+// ----------------------------------------------------
+// Initialize the popup windows for each button + load data
+// ----------------------------------------------------
+
 async function init() {
     await loadParshanim();
     await loadMasechtot();
@@ -173,6 +199,9 @@ async function init() {
 // Call init to initialize and populate popup windows
 init();
 
+// ----------------------------------------------------
+// hebrew to english logic + calc pages in Talmud Bavli
+// ----------------------------------------------------
 
 // Hebrew numeral to integer mapping
 const hebrewNumerals = {
@@ -255,11 +284,10 @@ function calculateGlobalPage(masechet, daf, amud) {
     return totalPages;
 }
 
-////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////
-
+// ----------------------------------------------------
 // Navigation logic for Talmud, Yerushalmi, Rambam, Parshanim
+// ----------------------------------------------------
+
 function navigateToPage() {
     const query = document.getElementById('query').value.trim();
 
@@ -276,6 +304,8 @@ function navigateToPage() {
         
     // case yerushalmi or rambam
     // example: ירושלמי גיטין א א
+    // example: רמבם אישות א א
+    // example: תוספתא גיטין א א
     else if(parts[0] == "ירושלמי" || parts[0] == "רמבם" || parts[0] == "תוספתא")
         yerushalmi(parts);
 
@@ -286,17 +316,11 @@ function navigateToPage() {
     
 }
 
-// Handle click on "Go" button
-document.getElementById('navigate').addEventListener('click', navigateToPage);
 
-// Handle "Enter" key press inside the input field
-document.getElementById('query').addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
-        navigateToPage();
-    }
-});
 
+// ----------------------------------------------------
 // gmara bavli case
+// ----------------------------------------------------
 function gmara_bavli(parts){
     let dafInHebrew;
         let masechet = parts[0];
@@ -369,7 +393,9 @@ function gmara_bavli(parts){
 
 }
 
+// ----------------------------------------------------
 // Parshanim case
+// ----------------------------------------------------
 function parshanim_func(parts){
     let masechet = parts[0];
     let dafInHebrew;
@@ -429,7 +455,9 @@ function parshanim_func(parts){
     return;
 }
 
-// Yerushalmi and Rambam case
+// ----------------------------------------------------
+// Yerushalmi or Rambam or Tosefta case
+// ----------------------------------------------------
 function yerushalmi(parts){
     let masechet = parts[0];
     let perek, halacha;
