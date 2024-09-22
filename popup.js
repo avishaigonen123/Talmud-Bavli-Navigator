@@ -464,7 +464,7 @@ function yerushalmi(parts){
     if (masechet ===  "ירושלמי"){
         masechet = parts[1];
 
-        if (masechet == "מעשר" || masechet == "ראש" || masechet == "מועד" || masechet == "בבא" ){
+        if (masechet == "מעשר" || masechet == "ראש" || masechet == "מועד" || masechet == "בבא"  || masechet == "עבודה"){
             masechet += " " + parts[2];
     
             perekInHebrew = parts[3];
