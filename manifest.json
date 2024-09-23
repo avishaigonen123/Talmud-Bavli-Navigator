@@ -3,9 +3,6 @@
   "name": "Daf Yomi Navigator",
   "version": "1.0",
   "description": "Enter a query to navigate to a specific daf in the Daf Yomi.",
-  "permissions": [
-    "activeTab"
-  ],
   "content_scripts": [
     {
       "matches": ["https://www.daf-yomi.com/*", "https://*.alhatorah.org/*"],  
