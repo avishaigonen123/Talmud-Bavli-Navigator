@@ -3,6 +3,7 @@
 // ----------------------------------------------------
 
 let parshanim = {};
+let books = [];
 let parshanim_rif = {};
 let masechtot = [];
 let masechtot_yerushalmi = [];
@@ -21,6 +22,18 @@ async function loadParshanim() {
     }
 }
 
+async function loadBooks() {
+    try {
+        const response = await fetch(chrome.runtime.getURL('data/books.json'));
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        books = await response.json(); // Parse JSON and assign it to parshanim
+    } catch (error) {
+        console.error('Error fetching the JSON file:', error);
+    }
+}
+
 async function loadParshanimRif() {
     try {
         const response = await fetch(chrome.runtime.getURL('data/parshanim_rif.json'));
@@ -32,7 +45,6 @@ async function loadParshanimRif() {
         console.error('Error fetching the JSON file:', error);
     }
 }
-
 
 async function loadHalakim() {
     try {
@@ -190,6 +202,7 @@ function showError(message) {
 
 async function init() {
     await loadParshanim();
+    await loadBooks();
     await loadParshanimRif();
     await loadMasechtot();
     await loadHalakim();
@@ -198,6 +211,9 @@ async function init() {
     // Populate the popups with the relevant lists
     const parshanimKeys = Object.keys(parshanim);
     setupPopupButton('parshanimBtn', parshanimKeys, 'רשימת פרשנים');
+
+    const booksKeys = books.map(item => item[0]);
+    setupPopupButton('booksBtn', booksKeys, 'רשימת ספרים בתנ"ך');
 
     const parshanimRifKeys = Object.keys(parshanim_rif);
     setupPopupButton('parshanimRifBtn', parshanimRifKeys, 'רשימת פרשנים על הרי"ף');
@@ -255,26 +271,11 @@ function numberToHebrewString(number) {
     }
 
     let result = '';
-    const thousands = Math.floor(number / 1000);
-    if (thousands > 0) {
-        result += numberToHebrew[thousands] + 'ת';
-        number %= 1000;
-    }
-
-    const hundreds = Math.floor(number / 100);
-    if (hundreds > 0) {
-        result += numberToHebrew[hundreds] + 'ש';
-        number %= 100;
-    }
-
-    const tens = Math.floor(number / 10);
-    if (tens > 0) {
-        result += numberToHebrew[tens * 10];
-        number %= 10;
-    }
-
-    if (number > 0) {
-        result += numberToHebrew[number];
+    for (const tav of Object.keys(hebrewNumerals).reverse()) {
+        while (number >= hebrewNumerals[tav]) {
+            result += tav;
+            number -= hebrewNumerals[tav];
+        }
     }
 
     return result;
@@ -317,9 +318,10 @@ function navigateToPage() {
     }
     // case gmara bavli
     // example: גיטין פב
-    if (parts.length == 2 || (parts.length == 3 && (parts[0] == "מועד" || parts[0] == "ראש" || parts[0] == "מועד" || parts[0] == "בבא" || parts[0] == "עבודה")) || (parts[parts.length - 1] == "התורה" && parts[parts.length-2] == "על")) 
+    // Find the maximum Daf for the selected Masechet
+    if(masechtot.find(m => m[0].startsWith(parts[0])) && (parts.length == 2 || (parts.length == 3 && (parts[0] == "מועד" || parts[0] == "ראש" || parts[0] == "מועד" || parts[0] == "בבא" || parts[0] == "עבודה")) || (parts[parts.length - 1] == "התורה" && parts[parts.length-2] == "על")))
         gmara_bavli(parts);
-        
+    
     // example: ירושלמי גיטין א א
     else if(parts[0] == "ירושלמי")
         yerushalmi(parts);
@@ -332,11 +334,20 @@ function navigateToPage() {
     // example: תוספתא גיטין א א
     else if(parts[0] == "ריף")
         rif(parts);
+    // case tanach
+    // example: יהושע א א 
+    else if(books.find(m => m[0].startsWith(parts[0])))
+        tanach(parts);
     
     // case parshanim
     // example: גיטין רשבא פב
-    else        
+    else if(masechtot.find(m => m[0].startsWith(parts[0])))
         parshanim_func(parts);
+
+    else {
+        showError("הכנס שאילתא חוקית");
+        return;
+    }
     
 }
 
@@ -445,20 +456,27 @@ function parshanim_func(parts){
     parts.reverse();
     dafInHebrew = parts[0].replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
     amud = parts[0].endsWith(':') ? 'b' : 'a';  // Detect amud based on input
-
     
-    let i=0;
-    for (const _mass of masechtot){
-        if(_mass[0] === masechet)
-            break;
-        i+=1;
+    // Convert Hebrew numerals to integer for daf
+    const daf = hebrewToNumber(dafInHebrew);
+    if (isNaN(daf) || daf < 2) {  // Daf must be at least 2
+        showError("בתלמוד הבבלי הדפים מתחילים מדף ב");
+        return;
     }
-    if(i == masechtot.length)
-    {
+
+    // Find the maximum Daf for the selected Masechet
+    const masechetInfo = masechtot.find(m => m[0] === masechet);
+    if (!masechetInfo) {
         showError("מסכת לא נמצאה");
         return;
     }
 
+    const maxDaf = masechetInfo[1][0] + 1;  // Number of Dafim in the Masechet
+    if (daf > maxDaf) {
+        showError(`הדף האחרון במסכת ${masechet} הוא דף ${numberToHebrewString(Math.floor(maxDaf))}`);
+        return;
+    }
+    
     // Check if it can be a prefix and save the matching key
     const matchingKey = Object.keys(parshanim).find(key => key.startsWith(parshan));
 
@@ -468,14 +486,8 @@ function parshanim_func(parts){
     }
     
     parshan = parshanim[matchingKey];
-    masechet = masechtot[i][1][1];
+    masechet = masechetInfo[1][1];
 
-    // Convert Hebrew numerals to integer for daf
-    const daf = hebrewToNumber(dafInHebrew);
-    if (isNaN(daf) || daf < 2) {  // Daf must be at least 2
-        showError("בתלמוד הבבלי הדפים מתחילים מדף ב");
-        return;
-    }
 
     const url = `https://shas.alhatorah.org/Dual/${parshan}/${masechet}/${daf}${amud}`;
     chrome.tabs.create({ url: url });
@@ -509,31 +521,31 @@ function yerushalmi(parts){
     }
     let url;
     // if(parts[parts.length - 1] === "התורה" && parts[parts.length -2] === "על"){
-        
-        const masechetInEnglish = masechetInfo[1][1];
-        const prakimList = masechetInfo[1][0];
+    
+    const masechetInEnglish = masechetInfo[1][1];
+    const prakimList = masechetInfo[1][0];
 
-        perekInHebrew = perekInHebrew.replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
-        // Convert Hebrew numerals to integer for daf
-        const perek = hebrewToNumber(perekInHebrew);
-        if (isNaN(perek) || perek > prakimList.length ) {  // 
-            showError(`פרק לא תקני, הפרק המקסימלי במסכת ${masechet} הוא פרק ${numberToHebrewString(prakimList.length)}`);
-            return;
-        }
-        
-        halachaInHebrew = halachaInHebrew.replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
-        // Convert Hebrew numerals to integer for halacha
-        const halacha = hebrewToNumber(halachaInHebrew);
-        if (isNaN(perek) || halacha > prakimList[perek-1] ) {  // 
-            showError(`הלכה לא תקנית, ההלכה המקסימלית במסכת ${masechet} בפרק ${perekInHebrew} היא הלכה ${numberToHebrewString(prakimList[perek-1])}`);
-            return;
-        }
-        
-        let halachot_total = halacha;
-        for (let i = 0; i < perek-1; i++)
-            halachot_total += prakimList[i];
+    perekInHebrew = perekInHebrew.replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
+    // Convert Hebrew numerals to integer for daf
+    const perek = hebrewToNumber(perekInHebrew);
+    if (isNaN(perek) || perek > prakimList.length ) {  // 
+        showError(`פרק לא תקני, הפרק המקסימלי במסכת ${masechet} הוא פרק ${numberToHebrewString(prakimList.length)}`);
+        return;
+    }
+    
+    halachaInHebrew = halachaInHebrew.replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
+    // Convert Hebrew numerals to integer for halacha
+    const halacha = hebrewToNumber(halachaInHebrew);
+    if (isNaN(perek) || halacha > prakimList[perek-1] ) {  // 
+        showError(`הלכה לא תקנית, ההלכה המקסימלית במסכת ${masechet} בפרק ${perekInHebrew} היא הלכה ${numberToHebrewString(prakimList[perek-1])}`);
+        return;
+    }
+    
+    let halachot_total = halacha;
+    for (let i = 0; i < perek-1; i++)
+        halachot_total += prakimList[i];
 
-        url = `https://yerushalmi.alhatorah.org/Full/${masechetInEnglish}/${halachot_total}`
+    url = `https://yerushalmi.alhatorah.org/Full/${masechetInEnglish}/${halachot_total}`
     // }
     // else {
     //     url = `https://he.wikisource.org/wiki/ירושלמי_${masechet}_${perekInHebrew}_${halachaInHebrew}`;
@@ -599,19 +611,15 @@ function tosefta(parts){
     let perekInHebrew = parts[1];
     let halachaInHebrew = parts[0];
     
-    let i=0;
-    for (const _mass of masechtot){
-        if(_mass[0] === masechet)
-            break;
-        i+=1;
-    }
-    if(i == masechtot.length)
-    {
+
+    // Find the maximum Daf for the selected Masechet
+    const masechetInfo = masechtot.find(m => m[0] === masechet);
+    if (!masechetInfo) {
         showError("מסכת לא נמצאה");
         return;
     }
 
-    masechet = masechtot[i][1][1];
+    masechet = masechetInfo[1][1];
     perekInHebrew = perekInHebrew.replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
     // Convert Hebrew numerals to integer for daf
     const perek = hebrewToNumber(perekInHebrew);
@@ -664,17 +672,13 @@ function rif(parts){
     amud = parts[0].endsWith(':') ? 'b' : 'a';  // Detect amud based on input
 
     
-    let i=0;
-    for (const _mass of masechtot){
-        if(_mass[0] === masechet)
-            break;
-        i+=1;
-    }
-    if(i == masechtot.length)
-    {
+    // Find the maximum Daf for the selected Masechet
+    const masechetInfo = masechtot.find(m => m[0] === masechet);
+    if (!masechetInfo) {
         showError("מסכת לא נמצאה");
         return;
     }
+
 
     // Check if it can be a prefix and save the matching key
     const matchingKey = Object.keys(parshanim_rif).find(key => key.startsWith(parshan));
@@ -686,7 +690,7 @@ function rif(parts){
 
 
     parshan = parshanim_rif[matchingKey];
-    masechet = masechtot[i][1][1];
+    masechet = masechetInfo[1][1];
 
     // Convert Hebrew numerals to integer for daf
     const daf = hebrewToNumber(dafInHebrew);
@@ -698,4 +702,48 @@ function rif(parts){
     const url = `https://rif.alhatorah.org/Dual/${parshan}/${masechet}/${daf}${amud}`;
     chrome.tabs.create({ url: url });
     return;    
+}
+
+function tanach(parts){
+    let book = parts[0];
+    let perekInHebrew;
+    let pasukInHebrew;
+
+    if (["שמואל", "מלכים", "שיר"].includes(book)){
+        book += " " + parts[1];
+    }
+    else if(book == "דברי"){
+        book = "דברי הימים " + parts[2]
+    }
+    // Find the if the book exists in the book list
+    const bookInfo = books.find(m => m[0] === book );
+    if (!bookInfo){
+        showError("ספר לא נמצא בתנ\"ך");
+        return;
+    }
+
+    parts.reverse();
+    pasukInHebrew = parts[0].replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
+    perekInHebrew = parts[1].replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
+    
+    const bookInEnglish = bookInfo[1][1];
+    const prakimList = bookInfo[1][0];
+
+    // Convert Hebrew numerals to integer for perek
+    const perek = hebrewToNumber(perekInHebrew);
+    if (isNaN(perek) || perek > prakimList.length ) {  // 
+        showError(`פרק לא תקני, הפרק המקסימלי ב${book} הוא פרק ${numberToHebrewString(prakimList.length)}`);
+        return;
+    }
+    
+    // Convert Hebrew numerals to integer for pasuk
+    const pasuk = hebrewToNumber(pasukInHebrew);
+    if (isNaN(perek) || pasuk > prakimList[perek-1] ) {  // 
+        showError(`הפסוק המקסימלי ב${book} פרק ${perekInHebrew} הוא פסוק ${numberToHebrewString(prakimList[perek-1])}`);
+        return;
+    }
+    
+    const url = `https://mg.alhatorah.org/Tanakh/${bookInEnglish}/${perek}.${pasuk}`;
+    chrome.tabs.create({ url: url });
+    return;
 }
