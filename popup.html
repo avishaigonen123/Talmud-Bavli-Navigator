@@ -1,68 +1,159 @@
 <!DOCTYPE html>
 <html lang="he">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>חיפוש דפים בתלמוד הבבלי</title>
 
     <link rel="stylesheet" href="styles.css">
-    <script src="popup.js" defer></script>
+    <script src="scripts/main.js" defer></script>
+    <script src="scripts/hebrewUtils.js"></script>
+    <script src="scripts/dataLodaer.js"></script>
+    <script src="scripts/errorHandler.js"></script>
+    <script src="scripts/buttons.js" defer></script>
+    <script src="scripts/popupWindow.js"></script>    
+    <script src="scripts/helpWindow.js"></script>
+
+
+
+    <script src="scripts/navigate.js"></script>
+
+    <script src="scripts/navigation/bavli.js"></script>
+    <script src="scripts/navigation/bavliParshanim.js"></script>
+    <script src="scripts/navigation/rambam.js"></script>
+    <script src="scripts/navigation/rambamParshanim.js"></script>
+    <script src="scripts/navigation/rif.js"></script>
+    <script src="scripts/navigation/rifParshanim.js"></script>
+    <script src="scripts/navigation/shulchanAruch.js"></script>
+    <script src="scripts/navigation/shulchanAruchParhsanim.js"></script>
+    <script src="scripts/navigation/tanach.js"></script>
+    <script src="scripts/navigation/tanachParshanim.js"></script>
+    <script src="scripts/navigation/tosefta.js"></script>
+    <script src="scripts/navigation/toseftaParshanim.js"></script>
+    <script src="scripts/navigation/yerushalmi.js"></script>
+    <script src="scripts/navigation/yerushalmiParshanim.js"></script>
+
+
 </head>
+
 <body>
     <div class="container">
         <h1>חיפוש דפים בתלמוד הבבלי</h1>
-        
+
         <input type="text" id="query" placeholder="הכנס שאליתא בהתאם לפורמט" autocomplete="off" autofocus>
-        
+
+        <div id="error-message"></div>
         <button id="navigate">חפש</button>
 
         <!-- Buttons for information -->
         <div class="info-section">
             <div>
-                <button class="info-btn" id="booksBtn">i</button> ספרים בתנ"ך
+                <button class="info-btn" id="tanachBtn">i</button> ספרים בתנ"ך
             </div>
             <div>
-                <button class="info-btn" id="parshanimBtn">i</button> פרשנים
+                <button class="info-btn" id="tanachParshanimBtn">i</button> פרשנים בתנ"ך
             </div>
             <div>
-                <button class="info-btn" id="parshanimRifBtn">i</button> פרשנים על הרי"ף 
+                <button class="info-btn" id="bavliBtn">i</button> מסכתות בבלי
             </div>
             <div>
-                <button class="info-btn" id="masechtotBtn">i</button> מסכתות בבלי
+                <button class="info-btn" id="bavliParshanimBtn">i</button> פרשנים על הבבלי
             </div>
             <div>
-                <button class="info-btn" id="halakimBtn">i</button> חלקים ברמב"ם
+                <button class="info-btn" id="yerushalmiBtn">i</button> מסכתות ירושלמי
             </div>
             <div>
-                <button class="info-btn" id="masechtotYerushalmiBtn">i</button> מסכתות ירושלמי
+                <button class="info-btn" id="yerushalmiParshanimBtn">i</button> פרשנים על הירושלמי
+            </div>
+            <div>
+                <button class="info-btn" id="toseftaBtn">i</button> מסכתות תוספתא
+            </div>
+            <div>
+                <button class="info-btn" id="toseftaParshanimBtn">i</button> פרשנים על התוספתא
+            </div>
+            <div>
+                <button class="info-btn" id="rifBtn">i</button> מסכתות רי"ף
+            </div>
+            <div>
+                <button class="info-btn" id="rifParshanimBtn">i</button> פרשנים על הרי"ף
+            </div>
+            <div>
+                <button class="info-btn" id="rambamBtn">i</button> חלקים ברמב"ם
+            </div>
+            <div>
+                <button class="info-btn" id="rambamParshanimBtn">i</button> פרשנים על הרמב"ם
+            </div>
+            <div>
+                <button class="info-btn" id="shulchanAruchBtn">i</button> חלקים בשו"ע
+            </div>
+            <div>
+                <button class="info-btn" id="shulchanAruchParshanimBtn">i</button> פרשנים על השו"ע
             </div>
         </div>
         <div class="help-container">
             <button class="help-btn" id="helpBtn">?</button>
             <div class="help-window" id="helpWindow">
-                <!-- Add your instructions here -->
-                <h3>כיצד לבצע שאילתא, דוגמאות:</h3>
-                <p>גיטין פד: - פתיחה צורת הדף</p>
-                <p>גיטין פד: על התורה - פתיחה בעל התורה</p>
-                <p>ירושלמי גיטין ד ד</p>
-                <p>רמבם אישות ד ד</p>
-                <p>ריף גיטין רן כג:</p>
-                <p>גיטין רשבא פד:</p>
-                <p>תוספתא גיטין ד ד</p>
-                <p>יהושע א א</p>
-                <p>באופן כללי, ניתן להשתמש בכפתורים בשביל לראות איך להכניס כל פרשן וחלק</p>
+                <h3>כיצד לבצע שאילתא - דוגמאות:</h3>
+                
+                <p>באופן כללי, ניתן להשתמש בכפתורים בשביל לראות איך להכניס כל פרשן וחלק. להלן דוגמאות לשאילתות:</p>
+                
+                <h4>תנ"ך:</h4>
+                <ul>
+                    <li>בראשית כה א</li>
+                    <li>בראשית רשי כה א</li>
+                </ul>
+
+                <h4>תלמוד בבלי:</h4>
+                <ul>
+                    <li>גיטין פו:</li>
+                    <li>גיטין רשי פו:</li>
+                </ul>
+            
+                <h4>תלמוד ירושלמי:</h4>
+                <ul>
+                    <li>ירושלמי פאה א ה</li>
+                    <li>ירושלמי פאה פני יהושע א ה</li>
+                </ul>
+            
+                <h4>תוספתא:</h4>
+                <ul>
+                    <li>תוספתא פאה א ה</li>
+                    <li>תוספתא פאה פירוש קצר א ה</li>
+                </ul>
+            
+                <h4>רי"ף:</h4>
+                <ul>
+                    <li>ריף גיטין כב:</li>
+                    <li>ריף גיטין רן כב:</li>
+                </ul>
+                <h4>שו"ע:</h4>
+                <ul>
+                    <li>שו"ע אורח חיים קמג א</li>
+                    <li>שו"ע אורח חיים משנה ברורה קמג א</li>
+                </ul>
             </div>
+            
         </div>
 
         <!-- Floating windows (initially hidden) -->
-        <div id="parshanimWindow" class="floating-window"></div>
-        <div id="booksWindow" class="floating-window"></div>
-        <div id="parshanimRifWindow" class="floating-window"></div>
-        <div id="masechtotWindow" class="floating-window"></div>
-        <div id="halakimWindow" class="floating-window"></div>
-        <div id="masechtotYerushalmiWindow" class="floating-window"></div>
-
-        <div id="error-message"></div>
+        <div id="tanachWindow" class="floating-window"></div>
+        <div id="tanachParshanimWindow" class="floating-window"></div>
+        <div id="bavliWindow" class="floating-window"></div>
+        <div id="bavliParshanimWindow" class="floating-window"></div>
+        <div id="yerushalmiWindow" class="floating-window"></div>
+        <div id="yerushalmiParshanimWindow" class="floating-window"></div>
+        <div id="yerushalmiParshanimWindow" class="floating-window"></div>
+        <div id="toseftaWindow" class="floating-window"></div>
+        <div id="toseftaParshanimWindow" class="floating-window"></div>
+        <div id="rifWindow" class="floating-window"></div>
+        <div id="rifParshanimWindow" class="floating-window"></div>
+        <div id="rambamWindow" class="floating-window"></div>
+        <div id="rambamParshanimWindow" class="floating-window"></div>
+        <div id="shulchanAruchWindow" class="floating-window"></div>
+        <div id="shulchanAruchParshanimWindow" class="floating-window"></div>
+       
     </div>
 </body>
+
 </html>

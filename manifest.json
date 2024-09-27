@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
   "name": "Daf Yomi Navigator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Enter a query to navigate to a specific daf in the Daf Yomi.",
   "content_scripts": [
     {
       "matches": ["https://www.daf-yomi.com/*", "https://*.alhatorah.org/*"],  
-      "js": ["content-script.js"]
+      "js": ["scripts/content-script.js"]
     }
   ],
   "action": {
