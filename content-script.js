@@ -6,7 +6,8 @@ console.log("Content script is running...");
 // Wait for the page to load
 window.onload = function() {
     // close annoying window in Al-Hatora
-    autoClickCloseButton();
+    if(autoCheckCheckbox()) // trying to mark as closed, otherwise, it can't be found, therefore no need to close
+        autoClickCloseButton();
 
     // full screen in Daf-Yomi page
     autoClickFullScreenButton();
@@ -65,5 +66,25 @@ function handleCloseButtonClick() {
     const overlay = document.querySelector('.mg-popup-overlay');
     if (overlay) {
         overlay.remove();
+    }
+}
+
+function autoCheckCheckbox() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    let targetCheckbox = null;
+    
+    checkboxes.forEach(checkbox => {
+        const label = checkbox.closest('label');
+        if (label) {
+            const labelText = label.textContent.trim();
+            if (labelText.includes("לא להציג שוב") || labelText.includes("Don't show again")) {
+                targetCheckbox = checkbox;
+            }
+        }
+    });
+    
+    if (targetCheckbox && !targetCheckbox.checked) {
+        targetCheckbox.checked = true; // Check the checkbox
+        return true;
     }
 }
