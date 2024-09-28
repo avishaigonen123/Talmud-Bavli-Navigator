@@ -3,18 +3,17 @@
 // ----------------------------------------------------
 function bavli(parts) {
     let masechet = parts.shift();
-    if (["מעשר", "עבודה", "ראש", "מועד", "בבא"].includes(masechet)) {
+    while( bavli_masechtot.find(m => m[0].startsWith(masechet + " " + parts[0])))
         masechet += " " + parts.shift();
-    }
     
     // case parshanim, maybe he tries "על התורה"
     if(parts.length > 1 && parts[parts.length - 1] != 'התורה') {
         bavli_parshanim_func(parts, masechet);
         return;
     }
+
     const dafInHebrew = parts[0].replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
     const amud = parts[0].endsWith(':') ? 'b' : 'a';  // Detect amud based on input
-    
     
     // Convert Hebrew numerals to integer for daf
     const daf = hebrewToNumber(dafInHebrew);

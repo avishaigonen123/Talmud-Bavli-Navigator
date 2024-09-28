@@ -7,6 +7,8 @@
     <title>חיפוש דפים בתלמוד הבבלי</title>
 
     <link rel="stylesheet" href="styles.css">
+
+
     <script src="scripts/main.js" defer></script>
     <script src="scripts/hebrewUtils.js"></script>
     <script src="scripts/dataLodaer.js"></script>
@@ -16,11 +18,12 @@
     <script src="scripts/helpWindow.js"></script>
 
 
-
     <script src="scripts/navigate.js"></script>
 
     <script src="scripts/navigation/bavli.js"></script>
     <script src="scripts/navigation/bavliParshanim.js"></script>
+    <script src="scripts/navigation/mishna.js"></script>
+    <script src="scripts/navigation/mishnaParshanim.js"></script>
     <script src="scripts/navigation/rambam.js"></script>
     <script src="scripts/navigation/rambamParshanim.js"></script>
     <script src="scripts/navigation/rif.js"></script>
@@ -53,6 +56,12 @@
             </div>
             <div>
                 <button class="info-btn" id="tanachParshanimBtn">i</button> פרשנים בתנ"ך
+            </div>
+            <div>
+                <button class="info-btn" id="mishnaBtn">i</button> מסכתות משנה
+            </div>
+            <div>
+                <button class="info-btn" id="mishnaParshanimBtn">i</button> פרשנים על המשנה
             </div>
             <div>
                 <button class="info-btn" id="bavliBtn">i</button> מסכתות בבלי
@@ -104,6 +113,12 @@
                     <li>בראשית רשי כה א</li>
                 </ul>
 
+                <h4>משנה:</h4>
+                <ul>
+                    <li>משנה פאה ב ב</li>
+                    <li>משנה פאה רשי ב ב</li>
+                </ul>
+
                 <h4>תלמוד בבלי:</h4>
                 <ul>
                     <li>גיטין פו:</li>
@@ -139,6 +154,8 @@
         <!-- Floating windows (initially hidden) -->
         <div id="tanachWindow" class="floating-window"></div>
         <div id="tanachParshanimWindow" class="floating-window"></div>
+        <div id="mishnaWindow" class="floating-window"></div>
+        <div id="mishnaParshanimWindow" class="floating-window"></div>
         <div id="bavliWindow" class="floating-window"></div>
         <div id="bavliParshanimWindow" class="floating-window"></div>
         <div id="yerushalmiWindow" class="floating-window"></div>

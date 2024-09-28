@@ -2,11 +2,12 @@
 // rif case
 // ----------------------------------------------------
 function rif(parts) {
-    parts.shift(); // remove first word
+    parts.shift(); // remove first word, "ריף"
+
     let masechet = parts.shift();
-    if (["מעשר", "עבודה", "ראש", "מועד", "בבא"].includes(masechet)) {
+    while( rif_masechtot.find(m => m[0].startsWith(masechet + " " + parts[0])))
         masechet += " " + parts.shift();
-    }
+    
     
     // Find the maximum Daf for the selected Masechet
     const masechetInfo = rif_masechtot.find(m => m[0] === masechet);

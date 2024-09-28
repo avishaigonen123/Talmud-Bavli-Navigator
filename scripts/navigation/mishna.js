@@ -1,32 +1,31 @@
-// ----------------------------------------------------
-// Tosefta
-// ----------------------------------------------------
-function tosefta(parts){
-    parts.shift(); // remove first part, "תוספתא"
 
+// ----------------------------------------------------
+// Mishan
+// ----------------------------------------------------
+function mishna(parts){
+    parts.shift(); // remove first word, "משנה"
+    
     let masechet = parts.shift();
-    while(tosefta_masechtot.find(m => m[0].startsWith(masechet + " " + parts[0])))
-        masechet += " " + parts.shift();
-    
-    
-    // Check if masechet exists
-    const masechetInfo = tosefta_masechtot.find(m => m[0] === masechet);
-    if (!masechetInfo) {
+    while(Object.keys(mishna_masechtot).find(key => key.startsWith(masechet + " " + parts[0])))
+        masechet += " " + parts.shift();    
+
+    // Check if it can be a prefix and save the matching key
+    const matchingKey = Object.keys(mishna_masechtot).find(key => key.startsWith(masechet));
+    if (!matchingKey) {
         showError("מסכת לא נמצאה");
         return;
     }
-    masechet = masechetInfo[1][1];
+    masechet = mishna_masechtot[matchingKey];
     
     // case parshanim
     if(parts.length > 2){
-        tosefta_parshanim_func(parts, masechet);
+        mishna_parshanim_func(parts, masechet);
         return;
     }
-    
     let perekInHebrew = parts.shift();
     let halachaInHebrew = parts.shift();
-
-
+    
+    
     perekInHebrew = perekInHebrew.replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
     // Convert Hebrew numerals to integer for daf
     const perek = hebrewToNumber(perekInHebrew);
@@ -43,7 +42,7 @@ function tosefta(parts){
         return;
     } 
 
-    const url = `https://tosefta.alhatorah.org/Full/${masechet}/${perek}.${halacha}}#e0n6`
+    const url = `https://mishna.alhatorah.org/Full/${masechet}/${perek}.${halacha}}#e0n6`
     chrome.tabs.create({ url: url });
-    return;    
+    return;
 }

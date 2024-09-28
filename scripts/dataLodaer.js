@@ -8,6 +8,9 @@ let bavli_parshanim = {};
 let ramabm_halakim = {};
 let ramabm_parshanim = {};
 
+let mishna_masechtot = {};
+let mishna_parshanim = {};
+
 let rif_masechtot = [];
 let rif_parshanim = {};
 
@@ -73,6 +76,32 @@ async function loadRambamParshanim() {
         console.error('Error fetching the JSON file:', error);
     }
 }
+
+// load mishna.json
+async function loadMishna() {
+    try {
+        const response = await fetch(chrome.runtime.getURL('data/mishna.json'));
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        mishna_masechtot = await response.json(); // Parse JSON and assign it to parshanim
+    } catch (error) {
+        console.error('Error fetching the JSON file:', error);
+    }
+}
+// load mishnaParshanim.json
+async function loadMishnaParshanim() {
+    try {
+        const response = await fetch(chrome.runtime.getURL('data/mishnaParshanim.json'));
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        mishna_parshanim = await response.json(); // Parse JSON and assign it to parshanim
+    } catch (error) {
+        console.error('Error fetching the JSON file:', error);
+    }
+}
+
 
 
 // load rif.json
@@ -211,6 +240,8 @@ async function loadData(){
     await loadMasechtotBavliParshanim();
     await loadRambam();
     await loadRambamParshanim();
+    await loadMishna();
+    await loadMishnaParshanim();
     await loadRif();
     await loadRifParshanim();
     await loadShulchanAruch();

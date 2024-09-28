@@ -1,31 +1,27 @@
-
 // ----------------------------------------------------
-// Rambam
+// Parshanim Mishna case
 // ----------------------------------------------------
-function rambam(parts){
-    parts.shift(); // remove first word, "רמבם"
-    
-    let helek = parts.shift();
-    while(Object.keys(ramabm_halakim).find(key => key.startsWith(helek + " " + parts[0])))
-        helek += " " + parts.shift();    
+function mishna_parshanim_func(parts, masechet) {
+    let parshan = parts.shift();
 
-    // Check if it can be a prefix and save the matching key
-    const matchingKey = Object.keys(ramabm_halakim).find(key => key.startsWith(helek));
-    if (!matchingKey) {
-        showError("חלק לא נמצא");
-        return;
+    // the parshan can be more than one word
+    while(parts.length > 2){
+        parshan += " " + parts.shift(); 
     }
-    helek = ramabm_halakim[matchingKey];
-    
-    // case parshanim
-    if(parts.length > 2){
-        rambam_parshanim_func(parts, helek);
-        return;
-    }
+
     let perekInHebrew = parts.shift();
     let halachaInHebrew = parts.shift();
     
     
+    // Check if it can be a prefix and save the matching key
+    matchingKey = Object.keys(mishna_parshanim).find(key => key.startsWith(parshan));
+    if (!matchingKey) {
+        showError("פרשן לא נמצא");
+        return;
+    }
+    parshan = mishna_parshanim[matchingKey];
+
+
     perekInHebrew = perekInHebrew.replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
     // Convert Hebrew numerals to integer for daf
     const perek = hebrewToNumber(perekInHebrew);
@@ -42,7 +38,7 @@ function rambam(parts){
         return;
     } 
 
-    const url = `https://rambam.alhatorah.org/Full/${helek}/${perek}.${halacha}}#e0n6`
+    const url = `https://mishna.alhatorah.org/Dual/${parshan}/${masechet}/${perek}.${halacha}}#e0n6`
     chrome.tabs.create({ url: url });
     return;
 }

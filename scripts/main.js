@@ -9,6 +9,9 @@ async function init() {
     setupPopupButton('tanachBtn', tanach_books.map(item => item[0]), 'תנ"ך');
     setupPopupButton('tanachParshanimBtn', Object.keys(tanach_parshanim), 'פרשנים תנ"ך');
 
+    setupPopupButton('mishnaBtn', Object.keys(mishna_masechtot), 'משנה');
+    setupPopupButton('mishnaParshanimBtn', Object.keys(mishna_parshanim), 'פרשנים משנה');
+    
     setupPopupButton('bavliBtn', bavli_masechtot.map(item => item[0]), 'בבלי');
     setupPopupButton('bavliParshanimBtn', Object.keys(bavli_parshanim), 'בבלי פרשנים');
 

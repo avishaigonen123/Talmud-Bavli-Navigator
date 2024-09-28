@@ -1,16 +1,14 @@
 
 
 function tanach(parts){
-    let book = parts.shift();
     let perekInHebrew;
     let pasukInHebrew;
 
-    if (["שמואל", "מלכים", "שיר"].includes(book)){
+    let book = parts.shift();
+    while(tanach_books.find(m => m[0].startsWith(book + " " + parts[0])))
         book += " " + parts.shift();
-    }
-    else if(book == "דברי"){
-        book = "דברי הימים " + parts.shift();
-    }
+    
+
     // Find the if the book exists in the book list
     const bookInfo = tanach_books.find(m => m[0] === book );
     if (!bookInfo){

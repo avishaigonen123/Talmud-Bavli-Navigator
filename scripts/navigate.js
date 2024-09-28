@@ -36,6 +36,11 @@ function navigateToPage() {
     else if(parts[0] == 'שו"ע')
         shulchanAruch(parts);
 
+    // example: משנה מעשר שני ב ב 
+    else if(parts[0] == 'משנה')
+        mishna(parts);
+
+
     else {
         showError("הכנס שאילתא חוקית");
         return;

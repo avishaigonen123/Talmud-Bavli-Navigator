@@ -2,12 +2,11 @@
 // Yerushalmi
 // ----------------------------------------------------
 function yerushalmi(parts){
-    parts.shift();
+    parts.shift(); // remove first part, "ירושלמי"
 
-    masechet = parts.shift();
-    if (masechet == "מעשר" || masechet == "ראש" || masechet == "מועד" || masechet == "בבא" ){
+    let masechet = parts.shift();
+    while(tosefta_masechtot.find(m => m[0].startsWith(masechet + " " + parts[0])))
         masechet += " " + parts.shift();
-    }
     
     // Check if masechet exists
     const masechetInfo = tosefta_masechtot.find(m => m[0] === masechet);

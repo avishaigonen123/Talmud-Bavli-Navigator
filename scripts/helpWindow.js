@@ -51,21 +51,24 @@ function openHelpWindow(items) {
                     direction: rtl;
                 }
 
-                help-window h3 {
-                    margin-top: 0;
-                    margin-bottom: 10px;
+                h3 {
+                    margin-top: -10;
+                    margin-bottom: -10;
+                    margin-right: 10px;
                     font-size: 16px;
                 }
 
-                help-window p {
-                    margin: 0;
+                p {
+                    margin-bottom: 20px;
+                    margin-right: 5px;
                 }
 
                 h1 { 
+                    margin-top: -70;
                     margin-bottom: 20px; 
                     font-size: 2em; 
-                    color: #4A90E2; 
-                    margin-right: 20px; /* Added margin to move title to the right */
+                    color: #9A97E2; 
+                    margin-right: 10px; /* Added margin to move title to the right */
                 }
             </style>
             </head>
@@ -73,7 +76,7 @@ function openHelpWindow(items) {
             <div class="container">
                 <div class="help-container">
                     <div class="help-window" id="helpWindow">
-                        <h3> &#x2022; כיצד לבצע שאילתא - דוגמאות:</h3>
+                        <h1> &#x2022; כיצד לבצע שאילתא - דוגמאות:</h1>
                         
                         <p> &#x2022; באופן כללי, ניתן להשתמש בכפתורים בשביל לראות איך להכניס כל פרשן וחלק. להלן דוגמאות לשאילתות:</p>
                         
@@ -110,6 +113,11 @@ function openHelpWindow(items) {
                         <ul>
                             <li>שו"ע אורח חיים קמג א</li>
                             <li>שו"ע אורח חיים משנה ברורה קמג א</li>
+                        </ul>
+                        <h3> &#x2022; משנה:</h3>
+                        <ul>
+                            <li>משנה מעשר שני ג א</li>
+                            <li>משנה מעשר שני מאירי ג א</li>
                         </ul>
                     </div>
                 </div>
