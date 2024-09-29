@@ -32,8 +32,8 @@ function navigateToPage() {
     else if(parts[0] == "ריף")
         rif(parts);
 
-    // example: שו"ע יורה דעה א א 
-    else if(parts[0] == 'שו"ע')
+    // example: שוע יורה דעה א א 
+    else if(parts[0] == 'שוע')
         shulchanAruch(parts);
 
     // example: משנה מעשר שני ב ב 

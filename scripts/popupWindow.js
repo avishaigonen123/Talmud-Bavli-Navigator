@@ -53,9 +53,15 @@ function showPopupWindow(items, title) {
         popupWindow.close();
         popupWindow = null;
     }
-
-    // Open a new window with specific position
-    popupWindow = window.open('', '_blank', `width=${window.outerWidth},height=${window.outerHeight},left=${window.screenX-window.outerWidth},top=${window.screenY},resizable=yes,scrollbars=yes`);
+    // Get the current window's position
+    if(window.screenX > 600){
+        // Open a new window with specific position
+        popupWindow = window.open('', '_blank', `width=${window.outerWidth},height=${window.outerHeight},left=${window.screenX-window.outerWidth},top=${window.screenY},resizable=yes,scrollbars=yes`);
+    }
+    else{
+        // Open a new window with specific position
+        popupWindow = window.open('', '_blank', `width=${window.outerWidth},height=${window.outerHeight},left=${window.screenX+window.outerWidth},top=${window.screenY},resizable=yes,scrollbars=yes`);
+    }
 
     // Write the content to the new window
     popupWindow.document.write(popupContent);

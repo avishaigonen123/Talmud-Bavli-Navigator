@@ -5,10 +5,7 @@
 let helpWindow;
 
 // Show the floating window when hovering over the button
-function openHelpWindow(items) {
-    // Get the current window's position
-    const left = window.screenX - window.outerWidth;
-    const top = window.screenY;    
+function openHelpWindow(items) { 
 
     const popupContent = `
         <html dir="rtl">
@@ -82,13 +79,20 @@ function openHelpWindow(items) {
                         
                         <h3> &#x2022; תנ"ך: </h3>
                         <ul>
-                            <li>בראשית כה א</li>
-                            <li>בראשית רשי כה א</li>
+                        <li>בראשית כה א</li>
+                        <li>בראשית רשי כה א</li>
                         </ul>
-
+                        
+                        <h3> &#x2022; משנה:</h3>
+                        <ul>
+                            <li>משנה מעשר שני ג א</li>
+                            <li>משנה מעשר שני מאירי ג א</li>
+                        </ul>
+                        
                         <h3> &#x2022; תלמוד בבלי:</h3>
                         <ul>
                             <li>גיטין פו:</li>
+                            <li>גיטין פו: על התורה</li>
                             <li>גיטין רשי פו:</li>
                         </ul>
                     
@@ -111,13 +115,8 @@ function openHelpWindow(items) {
                         </ul>
                         <h3> &#x2022; שו"ע:</h3>
                         <ul>
-                            <li>שו"ע אורח חיים קמג א</li>
-                            <li>שו"ע אורח חיים משנה ברורה קמג א</li>
-                        </ul>
-                        <h3> &#x2022; משנה:</h3>
-                        <ul>
-                            <li>משנה מעשר שני ג א</li>
-                            <li>משנה מעשר שני מאירי ג א</li>
+                            <li>שוע אורח חיים קמג א</li>
+                            <li>שוע אורח חיים משנה ברורה קמג א</li>
                         </ul>
                     </div>
                 </div>
@@ -125,9 +124,15 @@ function openHelpWindow(items) {
         </body>
         </html>
     `;
-
-    // Open a new window with specific position
-    helpWindow = window.open('', '_blank', `width=${window.outerWidth},height=${window.outerHeight+50},left=${window.screenX-window.outerWidth},top=${window.screenY},resizable=yes,scrollbars=yes`);
+    // Get the current window's position
+    if(window.screenX > 600){
+        // Open a new window with specific position
+        helpWindow = window.open('', '_blank', `width=${window.outerWidth},height=${window.outerHeight+50},left=${window.screenX-window.outerWidth},top=${window.screenY},resizable=yes,scrollbars=yes`);
+    }
+    else{
+        // Open a new window with specific position
+        helpWindow = window.open('', '_blank', `width=${window.outerWidth},height=${window.outerHeight+50},left=${window.screenX+window.outerWidth},top=${window.screenY},resizable=yes,scrollbars=yes`);
+    }
 
     // Write the content to the new window
     helpWindow.document.write(popupContent);

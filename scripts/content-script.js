@@ -5,6 +5,11 @@ console.log("Content script is running...");
 
 // Wait for the page to load
 window.onload = function() {
+    // there are 2 annoying windows on al-Hatorah
+    // close annoying window in Al-Hatora
+    if(autoCheckCheckbox()) // trying to mark as closed, otherwise, it can't be found, therefore no need to close
+        autoClickCloseButton();
+
     // close annoying window in Al-Hatora
     if(autoCheckCheckbox()) // trying to mark as closed, otherwise, it can't be found, therefore no need to close
         autoClickCloseButton();
@@ -85,6 +90,7 @@ function autoCheckCheckbox() {
     
     if (targetCheckbox && !targetCheckbox.checked) {
         targetCheckbox.checked = true; // Check the checkbox
+        console.log("Closed annoying window");
         return true;
     }
 }
