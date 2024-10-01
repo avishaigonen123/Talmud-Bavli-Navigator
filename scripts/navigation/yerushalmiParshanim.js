@@ -1,7 +1,7 @@
 // ----------------------------------------------------
 // Parshanim yerushalmi case
 // ----------------------------------------------------
-function yerushalmi_parshanim_func(parts, helek) {
+function yerushalmi_parshanim_func(parts, masechet, prakimList) {
     let parshan = parts.shift();
 
     // the parshan can be more than one word
@@ -38,7 +38,12 @@ function yerushalmi_parshanim_func(parts, helek) {
         return;
     } 
 
-    const url = `https://yerushalmi.alhatorah.org/Dual/${parshan}/${helek}/${perek}.${halacha}}#e0n6`
+    let halachot_total = halacha;
+    for (let i = 0; i < perek-1; i++)
+        halachot_total += prakimList[i];
+
+    const url = `https://yerushalmi.alhatorah.org/Dual/${parshan}/${masechet}/${halachot_total}`
+    
     chrome.tabs.create({ url: url });
     return;
 }

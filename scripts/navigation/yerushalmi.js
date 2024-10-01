@@ -5,20 +5,21 @@ function yerushalmi(parts){
     parts.shift(); // remove first part, "ירושלמי"
 
     let masechet = parts.shift();
-    while(tosefta_masechtot.find(m => m[0].startsWith(masechet + " " + parts[0])))
+    while(yerushalmi_masechtot.find(m => m[0].startsWith(masechet + " " + parts[0])))
         masechet += " " + parts.shift();
     
     // Check if masechet exists
-    const masechetInfo = tosefta_masechtot.find(m => m[0] === masechet);
+    const masechetInfo = yerushalmi_masechtot.find(m => m[0] === masechet);
     if (!masechetInfo) {
         showError("מסכת לא נמצאה");
         return;
     }
     masechet = masechetInfo[1][1];
-    
+    const prakimList = masechetInfo[1][0];
+
     // case parshanim
     if(parts.length > 2){
-        yerushalmi_parshanim_func(parts, masechet);
+        yerushalmi_parshanim_func(parts, masechet, prakimList);
         return;
     }
     
@@ -42,7 +43,12 @@ function yerushalmi(parts){
         return;
     } 
 
-    const url = `https://yerushalmi.alhatorah.org/Full/${masechet}/${perek}.${halacha}}#e0n6`
+    let halachot_total = halacha;
+    for (let i = 0; i < perek-1; i++)
+        halachot_total += prakimList[i];
+
+    const url = `https://yerushalmi.alhatorah.org/Full/${masechet}/${halachot_total}`
+
     chrome.tabs.create({ url: url });
     return;    
 }
