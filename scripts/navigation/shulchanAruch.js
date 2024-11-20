@@ -5,16 +5,22 @@
 function shulchanAruch(parts){
     parts.shift(); // remove first part, שו"ע
     
-    let helek = parts.shift();
-    helek += " " + parts.shift();
+    let helek = parts.shift(); // for case the user wants one word, eg "אוח"
+    // helek += " " + parts.shift();
     
 
     // Check if it can be a prefix and save the matching key
-    const matchingKey = Object.keys(shulchanAruch_books).find(key => key.startsWith(helek));
+    
+    let matchingKey = Object.keys(shulchanAruch_books).find(key => key.startsWith(helek));
     if (!matchingKey) {
         showError("חלק לא נמצא");
         return;
     }
+    lookahead = helek + " " + parts[0]; // for case the user wants two words, eg "אורח חיים"
+    if(Object.keys(shulchanAruch_books).find(key => key.startsWith(lookahead))){
+        matchingKey = lookahead
+        parts.shift(); // remove first part
+    }   
     helek = shulchanAruch_books[matchingKey];
     
     // case parshanim
