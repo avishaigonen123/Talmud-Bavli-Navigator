@@ -42,7 +42,7 @@ function rambam(parts){
         return;
     } 
 
-    const url = `https://rambam.alhatorah.org/Full/${helek}/${perek}.${halacha}}#e0n6`
+    const url = `https://rambam.alhatorah.org/Full/${helek}/${perek}.${halacha}`
     chrome.tabs.create({ url: url });
     return;
 }

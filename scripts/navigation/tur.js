@@ -1,9 +1,9 @@
 
 // ----------------------------------------------------
-// shulchanAruch
+// tur
 // ----------------------------------------------------
-function shulchanAruch(parts){
-    parts.shift(); // remove first part, שו"ע
+function tur(parts){
+    parts.shift(); // remove first part, טור
     
     let helek = parts.shift(); // for case the user wants one word, eg "אוח"
     // helek += " " + parts.shift();
@@ -48,7 +48,7 @@ function shulchanAruch(parts){
         return;
     } 
 
-    const url = `https://shulchanarukh.alhatorah.org/Full/${helek}/${siman}.${saif}`
+    const url = `https://tur.alhatorah.org/Full/${helek}/${siman}.${saif}`
     chrome.tabs.create({ url: url });
     return;
 }

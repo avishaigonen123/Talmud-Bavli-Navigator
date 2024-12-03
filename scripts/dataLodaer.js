@@ -23,6 +23,9 @@ let tanach_parshanim = {};
 let tosefta_masechtot = [];
 let tosefta_parshanim = {};
 
+let tur_books = {};
+let tur_parshanim = {};
+
 let yerushalmi_masechtot = [];
 let yerushalmi_parshanim = {};
 
@@ -207,6 +210,32 @@ async function loadToseftaParshanim() {
     }
 }
 
+// load tur.json
+async function loadTur() {
+    try {
+        const response = await fetch(chrome.runtime.getURL('data/tur.json'));
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        tur_books = await response.json(); // Parse JSON and assign it to parshanim
+    } catch (error) {
+        console.error('Error fetching the JSON file:', error);
+    }
+}
+// load turParshanim.json
+async function loadTurParshanim() {
+    try {
+        const response = await fetch(chrome.runtime.getURL('data/turParshanim.json'));
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        tur_parshanim = await response.json(); // Parse JSON and assign it to parshanim
+    } catch (error) {
+        console.error('Error fetching the JSON file:', error);
+    }
+}
+
+
 
 // load yerushalmi.json
 async function loadYerushalmi() {
@@ -250,6 +279,8 @@ async function loadData(){
     await loadTanachParshanim();
     await loadTosefta();
     await loadToseftaParshanim();
+    await loadTur();
+    await loadTurParshanim();
     await loadYerushalmi();
     await loadYerushalmiParshanim();
     

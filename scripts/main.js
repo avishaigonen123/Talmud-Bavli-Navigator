@@ -26,10 +26,13 @@ async function init() {
 
     setupPopupButton('rambamBtn', Object.keys(ramabm_halakim), 'רמבם');
     setupPopupButton('rambamParshanimBtn', Object.keys(ramabm_parshanim), 'פרשנים רמבם');
-
+    
     setupPopupButton('shulchanAruchBtn', Object.keys(shulchanAruch_books), 'שו"ע');
     setupPopupButton('shulchanAruchParshanimBtn', Object.keys(shulchanAruch_parshanim), 'פרשנים שו"ע');
     
+    setupPopupButton('turBtn', Object.keys(tur_books), 'טור');
+    setupPopupButton('turParshanimBtn', Object.keys(tur_parshanim), 'פרשנים טור');
+
     console.log('Popup windows are ready.');
 }
 

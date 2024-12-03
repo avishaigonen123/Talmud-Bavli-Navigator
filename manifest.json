@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Daf Yomi Navigator",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "Enter a query to navigate to a specific daf in the Daf Yomi, or another Torha source.",
   "content_scripts": [
     {

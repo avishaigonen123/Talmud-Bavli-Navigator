@@ -1,7 +1,7 @@
 // ----------------------------------------------------
-// Parshanim shulchanAruch case
+// Parshanim tur case
 // ----------------------------------------------------
-function shulchanAruch_parshanim_func(parts, helek) {
+function tur_parshanim_func(parts, helek) {
     let parshan = parts.shift();
 
     // the parshan can be more than one word
@@ -38,7 +38,7 @@ function shulchanAruch_parshanim_func(parts, helek) {
         return;
     } 
 
-    const url = `https://shulchanarukh.alhatorah.org/Dual/${parshan}/${helek}/${siman}.${saif}`
+    const url = `https://tur.alhatorah.org/Dual/${parshan}/${helek}/${siman}.${saif}`
     chrome.tabs.create({ url: url });
     return;
 }

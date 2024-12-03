@@ -42,7 +42,7 @@ function mishna(parts){
         return;
     } 
 
-    const url = `https://mishna.alhatorah.org/Full/${masechet}/${perek}.${halacha}}#e0n6`
+    const url = `https://mishna.alhatorah.org/Full/${masechet}/${perek}.${halacha}`
     chrome.tabs.create({ url: url });
     return;
 }

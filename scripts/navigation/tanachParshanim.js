@@ -38,7 +38,7 @@ function tanach_parshanim_func(parts, book, bookInfo) {
         return;
     }
 
-    const url = `https://mg.alhatorah.org/Dual/${parshan}/${bookInEnglish}/${perek}.${pasuk}}#e0n6`
+    const url = `https://mg.alhatorah.org/Dual/${parshan}/${bookInEnglish}/${perek}.${pasuk}`
     chrome.tabs.create({ url: url });
     return;
 }

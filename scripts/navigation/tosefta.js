@@ -43,7 +43,7 @@ function tosefta(parts){
         return;
     } 
 
-    const url = `https://tosefta.alhatorah.org/Full/${masechet}/${perek}.${halacha}}#e0n6`
+    const url = `https://tosefta.alhatorah.org/Full/${masechet}/${perek}.${halacha}`
     chrome.tabs.create({ url: url });
     return;    
 }

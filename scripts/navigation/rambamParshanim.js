@@ -38,7 +38,7 @@ function rambam_parshanim_func(parts, helek) {
         return;
     } 
 
-    const url = `https://rambam.alhatorah.org/Dual/${parshan}/${helek}/${perek}.${halacha}}#e0n6`
+    const url = `https://rambam.alhatorah.org/Dual/${parshan}/${helek}/${perek}.${halacha}`
     chrome.tabs.create({ url: url });
     return;
 }

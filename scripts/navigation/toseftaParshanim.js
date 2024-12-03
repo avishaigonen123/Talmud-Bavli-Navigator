@@ -38,7 +38,7 @@ function tosefta_parshanim_func(parts, helek) {
         return;
     } 
 
-    const url = `https://tosefta.alhatorah.org/Dual/${parshan}/${helek}/${perek}.${halacha}}#e0n6`
+    const url = `https://tosefta.alhatorah.org/Dual/${parshan}/${helek}/${perek}.${halacha}`
     chrome.tabs.create({ url: url });
     return;
 }

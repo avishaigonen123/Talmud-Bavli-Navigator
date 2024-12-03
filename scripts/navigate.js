@@ -36,6 +36,10 @@ function navigateToPage() {
     else if(parts[0] == 'שוע')
         shulchanAruch(parts);
 
+    // example: טור יורה דעה א א 
+    else if(parts[0] == 'טור')
+        tur(parts);
+    
     // example: משנה מעשר שני ב ב 
     else if(parts[0] == 'משנה')
         mishna(parts);
