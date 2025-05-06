@@ -16,7 +16,7 @@ function tanach_parshanim_func(parts, book, bookInfo) {
         return;
     }
     parshan = tanach_parshanim[matchingKey];
-
+    
     parts.reverse();
     pasukInHebrew = parts[0].replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
     perekInHebrew = parts[1].replace(/[^א-ת]/g, '');  // Only keep Hebrew letters

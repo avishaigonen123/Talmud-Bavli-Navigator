@@ -21,6 +21,9 @@ function tanach(parts){
         return;
     }
 
+    if(parts.length == 1){
+        parts[1] = 'א';
+    }
     parts.reverse();
     pasukInHebrew = parts[0].replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
     perekInHebrew = parts[1].replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
@@ -30,7 +33,7 @@ function tanach(parts){
 
     // Convert Hebrew numerals to integer for perek
     const perek = hebrewToNumber(perekInHebrew);
-    if (isNaN(perek) || perek > prakimList.length ) {  // 
+    if (isNaN(perek) || perek > prakimList.length ) {  
         showError(`פרק לא תקני, הפרק המקסימלי ב${book} הוא פרק ${numberToHebrewString(prakimList.length)}`);
         return;
     }

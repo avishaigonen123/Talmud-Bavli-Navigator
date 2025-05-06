@@ -28,6 +28,9 @@ function tur(parts){
         shulchanAruch_parshanim_func(parts, helek);
         return;
     }
+    if(parts.length == 1){
+        parts[1] = 'א';
+    }
     let simanInHebrew = parts.shift();
     let saifInHebrew = parts.shift();
     
@@ -48,7 +51,7 @@ function tur(parts){
         return;
     } 
 
-    const url = `https://tur.alhatorah.org/Full/${helek}/${siman}.${saif}`
+    const url = `https://tur.alhatorah.org/Main/${helek}/${siman}.${saif}`
     chrome.tabs.create({ url: url });
     return;
 }

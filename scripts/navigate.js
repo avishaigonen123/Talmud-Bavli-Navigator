@@ -44,6 +44,8 @@ function navigateToPage() {
     else if(parts[0] == 'משנה')
         mishna(parts);
 
+    else if(parts[0] == 'חיפוש')
+        search(parts);
 
     else {
         showError("הכנס שאילתא חוקית");

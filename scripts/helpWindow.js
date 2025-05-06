@@ -92,8 +92,8 @@ function openHelpWindow(items) {
                         <h3> &#x2022; תלמוד בבלי:</h3>
                         <ul>
                             <li>גיטין פו:</li>
-                            <li>גיטין פו: על התורה</li>
                             <li>גיטין רשי פו:</li>
+                            <li>גיטין פו: צורת הדף</li>
                         </ul>
                     
                         <h3> &#x2022; תלמוד ירושלמי:</h3>
@@ -113,6 +113,13 @@ function openHelpWindow(items) {
                             <li>ריף גיטין כב:</li>
                             <li>ריף גיטין רן כב:</li>
                         </ul>
+
+                        <h3> &#x2022; רמב"ם:</h3>
+                        <ul>
+                            <li>רמבם גירושין ב ב</li>
+                            <li>רמבם גירושין כסף משנה ב  ב</li>
+                        </ul> 
+
                         <h3> &#x2022; שו"ע:</h3>
                         <ul>
                             <li>שוע אורח חיים קמג א</li>
@@ -123,6 +130,7 @@ function openHelpWindow(items) {
                             <li>טור אורח חיים קמג א</li>
                             <li>טור אורח חיים בית יוסף קמג א</li>
                         </ul>
+
                     </div>
                 </div>
             </div>
@@ -132,11 +140,11 @@ function openHelpWindow(items) {
     // Get the current window's position
     if(window.screenX > 600){
         // Open a new window with specific position
-        helpWindow = window.open('', '_blank', `width=${window.outerWidth},height=${window.outerHeight+50},left=${window.screenX-window.outerWidth},top=${window.screenY},resizable=yes,scrollbars=yes`);
+        helpWindow = window.open('', '_blank', `width=${window.outerWidth},height=${window.outerHeight+190},left=${window.screenX-window.outerWidth},top=${window.screenY},resizable=yes,scrollbars=yes`);
     }
     else{
         // Open a new window with specific position
-        helpWindow = window.open('', '_blank', `width=${window.outerWidth},height=${window.outerHeight+50},left=${window.screenX+window.outerWidth},top=${window.screenY},resizable=yes,scrollbars=yes`);
+        helpWindow = window.open('', '_blank', `width=${window.outerWidth},height=${window.outerHeight+190},left=${window.screenX+window.outerWidth},top=${window.screenY},resizable=yes,scrollbars=yes`);
     }
 
     // Write the content to the new window

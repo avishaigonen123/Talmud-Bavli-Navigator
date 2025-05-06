@@ -22,6 +22,9 @@ function yerushalmi(parts){
         yerushalmi_parshanim_func(parts, masechet, prakimList);
         return;
     }
+    if(parts.length == 1){
+        parts[1] = 'א';
+    }
     
     let perekInHebrew = parts.shift();
     let halachaInHebrew = parts.shift();
@@ -47,7 +50,7 @@ function yerushalmi(parts){
     for (let i = 0; i < perek-1; i++)
         halachot_total += prakimList[i];
 
-    const url = `https://yerushalmi.alhatorah.org/Full/${masechet}/${halachot_total}`
+    const url = `https://yerushalmi.alhatorah.org/Triple/Korban_HaEdah/Penei_Moshe/${masechet}/${halachot_total}`
 
     chrome.tabs.create({ url: url });
     return;    

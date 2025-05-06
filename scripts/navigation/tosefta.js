@@ -22,6 +22,9 @@ function tosefta(parts){
         tosefta_parshanim_func(parts, masechet);
         return;
     }
+    if(parts.length == 1){
+        parts[1] = 'א';
+    }
     
     let perekInHebrew = parts.shift();
     let halachaInHebrew = parts.shift();
@@ -43,7 +46,7 @@ function tosefta(parts){
         return;
     } 
 
-    const url = `https://tosefta.alhatorah.org/Full/${masechet}/${perek}.${halacha}`
+    const url = `https://tosefta.alhatorah.org/Main/${masechet}/${perek}.${halacha}`
     chrome.tabs.create({ url: url });
     return;    
 }

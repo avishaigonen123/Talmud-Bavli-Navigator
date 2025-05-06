@@ -22,11 +22,15 @@ function rambam(parts){
         rambam_parshanim_func(parts, helek);
         return;
     }
+    if(parts.length == 1){
+        parts[1] = 'א';
+    }
     let perekInHebrew = parts.shift();
     let halachaInHebrew = parts.shift();
     
     
     perekInHebrew = perekInHebrew.replace(/[^א-ת]/g, '');  // Only keep Hebrew letters
+   
     // Convert Hebrew numerals to integer for daf
     const perek = hebrewToNumber(perekInHebrew);
     if (isNaN(perek) ) {  // 
@@ -42,7 +46,7 @@ function rambam(parts){
         return;
     } 
 
-    const url = `https://rambam.alhatorah.org/Full/${helek}/${perek}.${halacha}`
+    const url = `https://rambam.alhatorah.org/Main/${helek}/${perek}.${halacha}`
     chrome.tabs.create({ url: url });
     return;
 }

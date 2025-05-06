@@ -28,6 +28,9 @@ function shulchanAruch(parts){
         shulchanAruch_parshanim_func(parts, helek);
         return;
     }
+    if(parts.length == 1){
+        parts[1] = 'א';
+    }
     let simanInHebrew = parts.shift();
     let saifInHebrew = parts.shift();
     
@@ -48,7 +51,7 @@ function shulchanAruch(parts){
         return;
     } 
 
-    const url = `https://shulchanarukh.alhatorah.org/Full/${helek}/${siman}.${saif}`
+    const url = `https://shulchanarukh.alhatorah.org/Dual/Mishna_Berurah/${helek}/${siman}.${saif}`
     chrome.tabs.create({ url: url });
     return;
 }

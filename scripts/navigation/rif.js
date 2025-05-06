@@ -41,7 +41,7 @@ function rif(parts) {
     }
 
     // Navigate to the corresponding page on Daf Yomi
-    const url = `https://rif.alhatorah.org/Full/${masechet}/${daf}${amud}`;
+    const url = `https://rif.alhatorah.org/Dual/Ran_on_Rif/${masechet}/${daf}${amud}`;
     chrome.tabs.create({ url: url });
 
 
